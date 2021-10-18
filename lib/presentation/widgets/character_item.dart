@@ -3,9 +3,44 @@ import 'package:morty_app/data/models/morty_model.dart';
 import 'package:morty_app/presentation/screens/details_screen.dart';
 import 'package:morty_app/presentation/widgets/animated_text.dart';
 
-class CharacterItem extends StatelessWidget {
+class CharacterItem extends StatefulWidget {
   final Character character;
   const CharacterItem({Key? key, required this.character}) : super(key: key);
+
+  @override
+  State<CharacterItem> createState() => _CharacterItemState();
+}
+
+class _CharacterItemState extends State<CharacterItem>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 666),
+      vsync: this,
+    );
+    _animation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(
+      _controller,
+    );
+    _controller.reverse().then((value) => _controller.forward());
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +50,7 @@ class CharacterItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Expanded(child: _buildCharacterImage(character)),
+            Expanded(child: _buildCharacterImage(widget.character)),
             const SizedBox(
               width: 12,
             ),
@@ -64,7 +99,7 @@ class CharacterItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: AnimatedText(
-        text: character.origin!.name.toString(),
+        text: widget.character.origin!.name.toString(),
         maxLine: 2,
         begin: 8,
         end: 14,
@@ -74,7 +109,7 @@ class CharacterItem extends StatelessWidget {
 
   Widget _buildPublishedAt(BuildContext context) {
     return AnimatedText(
-      text: character.created!,
+      text: widget.character.created!,
       end: 10,
       begin: 4,
       color: Colors.blue,
@@ -83,15 +118,21 @@ class CharacterItem extends StatelessWidget {
 
   Widget _buildTextHeader(BuildContext context) {
     return AnimatedText(
-        text: character.name!, color: Colors.greenAccent, begin: 10, end: 20);
+        text: widget.character.name!,
+        color: Colors.greenAccent,
+        begin: 10,
+        end: 20);
   }
 
   Widget _buildCharacterImage(Character character) {
-    return Image.network(
-      character.image!,
-      height: 100,
-      width: 150,
-      fit: BoxFit.cover,
+    return FadeTransition(
+      opacity: _animation,
+      child: Image.network(
+        character.image!,
+        height: 100,
+        width: 150,
+        fit: BoxFit.cover,
+      ),
     );
   }
 
@@ -99,7 +140,7 @@ class CharacterItem extends StatelessWidget {
     Navigator.of(context, rootNavigator: true)
         .pushReplacement(MaterialPageRoute(
       builder: (context) => DetailsScreen(
-        character: character,
+        character: widget.character,
       ),
     ));
   }
