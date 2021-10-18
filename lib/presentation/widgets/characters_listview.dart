@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:morty_app/bussiness/morty_states.dart';
 import 'package:morty_app/data/models/morty_model.dart';
@@ -15,7 +17,38 @@ class CharacterListView extends StatefulWidget {
   _ArticleListViewState createState() => _ArticleListViewState();
 }
 
-class _ArticleListViewState extends State<CharacterListView> {
+class _ArticleListViewState extends State<CharacterListView>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<Offset> _animation;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 666),
+      vsync: this,
+    );
+    _animation = Tween<Offset>(
+      begin: const Offset(-1, -1),
+      end: Offset.zero,
+    ).animate(
+      _controller,
+    );
+    if (mounted) {
+      _controller.forward();
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // final cubit = BlocProvider.of<MortyCharacterCubit>(context);
@@ -33,9 +66,11 @@ class _ArticleListViewState extends State<CharacterListView> {
         ),
       );
     } else {
-      return buildArticlesList(
-        characters: widget.characters,
-        context: context,
+      return SizedBox(
+        child: buildArticlesList(
+          characters: widget.characters,
+          context: context,
+        ),
       );
     }
   }
@@ -48,24 +83,21 @@ class _ArticleListViewState extends State<CharacterListView> {
     // bool newPage = false;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 12, right: 12),
-      child: ListView.builder(
-        addAutomaticKeepAlives: true,
-        itemBuilder: (context, index) {
-          return Column(
+        padding: const EdgeInsets.only(left: 12, right: 12),
+        child: ListView.builder(
+          itemCount: characters.length,
+          itemBuilder: (context, index) => Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CharacterItem(character: characters[index]),
+              SlideTransition(
+                  position: _animation,
+                  child: CharacterItem(character: characters[index])),
               const Divider(
                 endIndent: 20,
                 thickness: 6,
               ),
             ],
-          );
-        },
-        itemCount: characters.length,
-        physics: const BouncingScrollPhysics(),
-      ),
-    );
+          ),
+        ));
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:morty_app/data/models/morty_model.dart';
 import 'package:morty_app/presentation/screens/details_screen.dart';
@@ -29,7 +31,8 @@ class _CharacterItemState extends State<CharacterItem>
     ).animate(
       _controller,
     );
-    _controller.reverse().then((value) => _controller.forward());
+
+    // _controller.reverse().then((value) => _controller.forward());
 
     super.initState();
   }
@@ -111,7 +114,7 @@ class _CharacterItemState extends State<CharacterItem>
     return AnimatedText(
       text: widget.character.created!,
       end: 10,
-      begin: 4,
+      begin: 0,
       color: Colors.blue,
     );
   }
@@ -120,7 +123,7 @@ class _CharacterItemState extends State<CharacterItem>
     return AnimatedText(
         text: widget.character.name!,
         color: Colors.greenAccent,
-        begin: 10,
+        begin: 5,
         end: 20);
   }
 
