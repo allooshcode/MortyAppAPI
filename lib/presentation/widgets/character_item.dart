@@ -1,36 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:morty_app/data/models/morty_model.dart';
 import 'package:morty_app/presentation/screens/details_screen.dart';
+import 'package:morty_app/presentation/widgets/animated_text.dart';
 
-class ListItem extends StatelessWidget {
+class CharacterItem extends StatelessWidget {
   final Character character;
-  const ListItem({Key? key, required this.character}) : super(key: key);
+  const CharacterItem({Key? key, required this.character}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => navigateToDetails(context),
-      child: Row(
-        children: [
-          Expanded(child: _buildArticleImage(character)),
-          const SizedBox(
-            width: 12,
-          ),
-          _buildArticleInformation(context),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(child: _buildCharacterImage(character)),
+            const SizedBox(
+              width: 12,
+            ),
+            _buildCharacterInformation(context),
+          ],
+        ),
       ),
     );
 
     // TODO: implement build
   }
 
-  Widget _buildArticleInformation(BuildContext context) {
+  Widget _buildCharacterInformation(BuildContext context) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           _buildTextHeader(context),
-          _buildTextDescripetion(context),
+          _buildTextOrigin(context),
           const SizedBox(
             height: 12,
           ),
@@ -43,8 +47,11 @@ class ListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildText(
-      {required String text, int maxLine = 1, required TextStyle style}) {
+  Widget _buildText({
+    required String text,
+    int maxLine = 1,
+    required TextStyle style,
+  }) {
     return Text(
       text,
       maxLines: maxLine,
@@ -53,24 +60,33 @@ class ListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildTextDescripetion(context) {
-    return _buildText(
-        text: character.created.toString(),
+  Widget _buildTextOrigin(context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: AnimatedText(
+        text: character.origin!.name.toString(),
         maxLine: 2,
-        style: Theme.of(context).textTheme.bodyText1!);
+        begin: 8,
+        end: 14,
+      ),
+    );
   }
 
   Widget _buildPublishedAt(BuildContext context) {
-    return _buildText(
-        text: character.gender!, style: Theme.of(context).textTheme.bodyText2!);
+    return AnimatedText(
+      text: character.created!,
+      end: 10,
+      begin: 4,
+      color: Colors.blue,
+    );
   }
 
   Widget _buildTextHeader(BuildContext context) {
-    return _buildText(
-        text: character.name!, style: Theme.of(context).textTheme.bodyText1!);
+    return AnimatedText(
+        text: character.name!, color: Colors.greenAccent, begin: 10, end: 20);
   }
 
-  Widget _buildArticleImage(Character character) {
+  Widget _buildCharacterImage(Character character) {
     return Image.network(
       character.image!,
       height: 100,

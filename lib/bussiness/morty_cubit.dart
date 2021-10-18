@@ -14,6 +14,10 @@ class MortyCharacterCubit extends Cubit<MortyCharacterState> {
   }
 
   void getCharacters() {
+    if (_characters.isNotEmpty) {
+      emit(MortyCharacterSuccessState(_characters));
+      return;
+    }
     emit(MortyCharacterLoadingState());
 
     _mortyRepository.getCharacters().then((value) {
