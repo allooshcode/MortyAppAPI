@@ -6,6 +6,7 @@ import 'package:morty_app/data/repository/morty_repository.dart';
 import 'package:morty_app/data/web_services/dio_services.dart';
 import 'package:morty_app/presentation/screens/characters_page.dart';
 import 'package:morty_app/presentation/screens/home_page.dart';
+import 'package:morty_app/presentation/screens/splash_page.dart';
 import 'package:morty_app/shared/constants.dart';
 
 class AppRouter {
@@ -21,6 +22,8 @@ class AppRouter {
             builder: (ctx) => BlocProvider<MortyCharacterCubit>.value(
                 value: characterCubit..getCharacters(),
                 child: const CharactersPage()));
+      case splashPage:
+        return MaterialPageRoute(builder: (ctx) => const SplashPage());
 
       default:
         return MaterialPageRoute(builder: (ctx) => const HomePage());

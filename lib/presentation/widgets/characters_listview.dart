@@ -67,7 +67,7 @@ class _ArticleListViewState extends State<CharacterListView>
       );
     } else {
       return SizedBox(
-        child: buildArticlesList(
+        child: buildCharacterList(
           characters: widget.characters,
           context: context,
         ),
@@ -75,7 +75,7 @@ class _ArticleListViewState extends State<CharacterListView>
     }
   }
 
-  Widget buildArticlesList({
+  Widget buildCharacterList({
     required List<Character> characters,
     required BuildContext context,
   }) {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:morty_app/shared/constants.dart';
 
 class AnimatedText extends StatelessWidget {
   const AnimatedText(
       {Key? key,
+      this.isSplash = false,
       required this.text,
       required this.begin,
       this.color = Colors.black,
@@ -15,6 +17,7 @@ class AnimatedText extends StatelessWidget {
   final double end;
   final int maxLine;
   final Color color;
+  final bool isSplash;
 
   @override
   Widget build(BuildContext context) {

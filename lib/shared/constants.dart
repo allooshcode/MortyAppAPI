@@ -3,3 +3,4 @@ const String characterUrl = '/character';
 
 const String characterPage = '/characterPage';
 const String homePage = '/home';
+const String splashPage = '/splashPage';
